@@ -1,0 +1,239 @@
+Responsive Image Grids Using CSS
+
+2013 Sep 12
+HTML / CSS
+Tutorials
+Home  /  Tutorials  /  HTML / CSS  /  Responsive Image Grids Using CSS
+
+Today we’re going to build a responsive image grid using CSS. No fancy dancy JavaScript or frameworks needed, just good ‘ole HTML and CSS.
+
+Image grids are used all over the web – for pictures, products, profiles… you name it! Why? Because they’re a great solution for displaying rows and columns of visual data. Now that we know why they’re useful, let’s dig in!
+
+The HTML
+
+Our HTML is a simple unordered list with the class of rig – <ul class=”rig”>. Inside each li we’ll throw in an image, an h3, and a p for some content. Note: these are all optional, you could easily create this grid with just images inside of the li‘s.
+
+<ul class="rig">
+	<li>
+		<img src="images/pri_001.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_002.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_003.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_004.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+</ul>
+The CSS
+
+Now that we have our markup, we’ll add some styling to make our grid responsive. There’s a few critical things to understand here:
+
+1) Display vs. Float
+
+Normally, most web developers would float to get a “grid effect.” Instead, I’ve used the display: inline-block approach with a nice little hack – we set our ul to font-size: 0px and then our li‘s to font-size: 16px AND font-size: 1rem. What??? I know, it shocked me at first too, but it works! And the double font-size declaration is for our old friend IE (Internet Explorer doesn’t recognize rem units, so the 16px is a fall-back). I’ve added some extra li styling to make the grid look nice :)
+
+ul.rig {
+	list-style: none;
+	font-size: 0px;
+}
+ul.rig li {
+	display: inline-block;
+	padding: 10px;
+	background: #fff;
+	border: 1px solid #ddd;
+	font-size: 16px;
+	font-size: 1rem;
+	vertical-align: top;
+	box-shadow: 0 0 5px #ddd;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+ul.rig li img {
+	max-width: 100%;
+	height: auto;
+	margin: 0 0 10px;
+}
+ul.rig li h3 {
+	margin: 0 0 5px;
+}
+ul.rig li p {
+	font-size: .9em;
+	line-height: 1.5em;
+	color: #999;
+}
+2) Math & Margins
+
+The whole point of responsive [or fluid] grids is to do perfect math. For example, if we have 4 columns they should all equal 25% width. To create a grid with spacing (gutters) we need to also accommodate for margins. In this example, I’ve chose a universal margin of 2.5% for all grids. This translates into a left margin of 2.5% for each li and a negative left margin of 2.5% for the ul.
+
+ul.rig {
+	list-style: none;
+	font-size: 0px;
+	margin-left: -2.5%; /* should match li left margin */
+}
+ul.rig li {
+	display: inline-block;
+	padding: 10px;
+	margin: 0 0 2.5% 2.5%;
+	background: #fff;
+	border: 1px solid #ddd;
+	font-size: 16px;
+	font-size: 1rem;
+	vertical-align: top;
+	box-shadow: 0 0 5px #ddd;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+Now we need a little math to figure out the li widths for each grid:
+
+2 Column Grid: 100% / 2 = 50%… 50% – 2.5% = 47.5%
+3 Column Grid: 100% / 3 = 33.33%… 33.33% – 2.5% = 30.83%
+2 Column Grid: 100% / 4 = 25%… 25% – 2.5% = 22.5%
+Now that we have our li widths, we’ll create 3 separate classes for them. This way you can change the ul class to dictate how many columns you want.
+
+/* class for 2 columns */
+ul.rig.columns-2 li {
+	width: 47.5%; /* this value + 2.5 should = 50% */
+}
+/* class for 3 columns */
+ul.rig.columns-3 li {
+	width: 30.83%; /* this value + 2.5 should = 33% */
+}
+/* class for 4 columns */
+ul.rig.columns-4 li {
+	width: 22.5%; /* this value + 2.5 should = 25% */
+}
+3) Media Queries
+
+The icing on the cake is a few simple media queries. For this example, I’ve decided to turn the grid into one column at 480px wide (typical mobile breakpoint). To do so, I make all the li‘s 100% wide and remove their left margin. I also get rid of the negative margin on the ul. Feel free to experiment with different breakpoints if you want your columns to hit 100% width earlier (ex: 768px) or later (ex: 360px).
+
+@media (max-width: 480px) {
+	ul.grid-nav li {
+		display: block;
+		margin: 0 0 5px;
+	}
+	ul.grid-nav li a {
+		display: block;
+	}
+	ul.rig {
+		margin-left: 0;
+	}
+	ul.rig li {
+		width: 100% !important; /* over-ride all li styles */
+		margin: 0 0 20px;
+	}
+}
+Finished Product
+
+Your complete CSS should look like this:
+
+ul.rig {
+	list-style: none;
+	font-size: 0px;
+	margin-left: -2.5%; /* should match li left margin */
+}
+ul.rig li {
+	display: inline-block;
+	padding: 10px;
+	margin: 0 0 2.5% 2.5%;
+	background: #fff;
+	border: 1px solid #ddd;
+	font-size: 16px;
+	font-size: 1rem;
+	vertical-align: top;
+	box-shadow: 0 0 5px #ddd;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+ul.rig li img {
+	max-width: 100%;
+	height: auto;
+	margin: 0 0 10px;
+}
+ul.rig li h3 {
+	margin: 0 0 5px;
+}
+ul.rig li p {
+	font-size: .9em;
+	line-height: 1.5em;
+	color: #999;
+}
+/* class for 2 columns */
+ul.rig.columns-2 li {
+	width: 47.5%; /* this value + 2.5 should = 50% */
+}
+/* class for 3 columns */
+ul.rig.columns-3 li {
+	width: 30.83%; /* this value + 2.5 should = 33% */
+}
+/* class for 4 columns */
+ul.rig.columns-4 li {
+	width: 22.5%; /* this value + 2.5 should = 25% */
+}
+
+@media (max-width: 480px) {
+	ul.grid-nav li {
+		display: block;
+		margin: 0 0 5px;
+	}
+	ul.grid-nav li a {
+		display: block;
+	}
+	ul.rig {
+		margin-left: 0;
+	}
+	ul.rig li {
+		width: 100% !important; /* over-ride all li styles */
+		margin: 0 0 20px;
+	}
+}
+Finally, let’s add one of our .column- classes to our ul to specify how many columns we want the grid to be:
+
+<ul class="rig columns-3">
+	<li>
+		<img src="images/pri_001.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_002.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_003.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_004.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_005.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+	<li>
+		<img src="images/pri_006.jpg" />
+		<h3>Image Title</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+	</li>
+</ul>
+Summary
+
+And that’s it! A simple, yet effective, responsive image grid using CSS. I hope this helps you in your projects. Feel free to chime in with questions and suggestions in the comments below.
